@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 
 
@@ -27,6 +28,21 @@ export const getbooks = createAsyncThunk(
     }
   }
 );
+export const deleteBook = createAsyncThunk(
+  "deleteBook/Books",
+  async (bookID, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+    try {
+      const response = await axios.delete(`https://6734e6385995834c8a914b17.mockapi.io/api/v1/Books/${bookID}`);
+      return response.data;
+    } catch (error) {
+        if(error instanceof Error){
+          return rejectWithValue(error.message);
+        }
+ 
+    }
+  }
+);
 
 // slice
 export const Bookslice = createSlice({
@@ -42,6 +58,19 @@ export const Bookslice = createSlice({
       state.data = action.payload;
     });
     builder.addCase(getbooks.rejected, (state) => {
+      state.isloading = false;
+    });
+    ///////////////////// --delete book -- /////////////////////////
+    builder.addCase(deleteBook.pending, (state) => {
+      state.isloading = true;
+    });
+    builder.addCase(deleteBook.fulfilled, (state, action) => {
+      state.isloading = false;
+      // state.data = action.payload;
+      state.data = state.data.filter(book => book.id !== action.payload.id);
+      toast.success("Book deleted successfully");
+    });
+    builder.addCase(deleteBook.rejected, (state) => {
       state.isloading = false;
     });
   },

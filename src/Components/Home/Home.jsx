@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
 import { LiaBookOpenSolid } from "react-icons/lia";
-import { getbooks } from "../Redux/Bookslice";
+import { deleteBook, getbooks } from "../Redux/Bookslice";
 import { useAppDispatch, useAppSelector } from "../Redux/hooks";
 import { ColorRing } from 'react-loader-spinner';
 import AddFormBook from "./AddFormBook";
+import { Flip, ToastContainer } from "react-toastify";
 export default function Home() {
 
   const dispatch = useAppDispatch();
@@ -86,7 +86,9 @@ export default function Home() {
                       <button className="px-3 py-1 cursor-pointer bg-blue-950 text-white rounded hover:opacity-90">
                         Edit
                       </button>
-                      <button className="px-3 py-1 cursor-pointer bg-red-700 text-white rounded hover:opacity-90">
+                      <button 
+                        onClick={() =>{ dispatch(deleteBook(item.id))}}
+                      className="px-3 py-1 cursor-pointer bg-red-700 text-white rounded hover:opacity-90">
                         Delete
                       </button>
                     </div>
@@ -97,7 +99,21 @@ export default function Home() {
           </table>
         )}
       </main>
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Flip}
+      />
     </div>
+    
   );
 }
 
