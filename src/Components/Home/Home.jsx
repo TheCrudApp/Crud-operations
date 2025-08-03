@@ -1,15 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { LiaBookOpenSolid } from "react-icons/lia";
 import { getbooks } from "../Redux/Bookslice";
 import { useAppDispatch, useAppSelector } from "../Redux/hooks";
 import { ColorRing } from 'react-loader-spinner';
-
+import AddFormBook from "./AddFormBook";
 export default function Home() {
+
   const dispatch = useAppDispatch();
   const { data, isloading } = useAppSelector((state) => state.book);
+  const [showForm, setshowForm] = useState(false);
 
+  const handelSubmitForm = ()=>{
+    setshowForm(true);
+  }
   useEffect(() => {
     dispatch(getbooks());
   }, [dispatch]);
@@ -18,7 +23,7 @@ export default function Home() {
     <div className="flex flex-col gap-8 pb-10">
       {/* Header */}
       <header className="bg-blue-950 h-14 flex justify-center items-center gap-3">
-        <h1 className="text-3xl font-bold text-white hover:text-orange-600">
+        <h1 className="text-3xl font-bold text-white hover:text-orange-600 hover:cursor-pointer">
           Book Store
         </h1>
         <LiaBookOpenSolid className="text-white text-4xl" />
@@ -26,10 +31,13 @@ export default function Home() {
 
       {/* Content */}
       <main className="w-[90%] mx-auto overflow-x-auto">
-            <button className="bg-blue-950 w-64 mb-3 cursor-pointer text-white hover:bg-orange-600 transition-all duration-300 font-bold px-6 py-2 rounded-xl">
+
+            <button 
+            onClick={handelSubmitForm}
+            className="bg-blue-950 w-64 mb-3 cursor-pointer text-white hover:bg-orange-600 transition-all duration-300 font-bold px-6 py-2 rounded-xl">
               Add Book
             </button>
-        
+            {showForm && <AddFormBook onClose={()=>setshowForm(false)} />}
        
         {/* Loader or Table */}
         {isloading ? (
