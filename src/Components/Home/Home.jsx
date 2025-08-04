@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { LiaBookOpenSolid } from "react-icons/lia";
-import { deleteBook, getbooks } from "../Redux/Bookslice";
+import { getbooks } from "../Redux/Bookslice";
 import { useAppDispatch, useAppSelector } from "../Redux/hooks";
 import { ColorRing } from 'react-loader-spinner';
 import AddFormBook from "./AddFormBook";
 import { Flip, ToastContainer } from "react-toastify";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 export default function Home() {
 
   const dispatch = useAppDispatch();
   const { data, isloading } = useAppSelector((state) => state.book);
   const [showForm, setshowForm] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState({show:false, bookID:null });
 
   const handelSubmitForm = ()=>{
     setshowForm(true);
@@ -87,7 +89,7 @@ export default function Home() {
                         Edit
                       </button>
                       <button 
-                        onClick={() =>{ dispatch(deleteBook(item.id))}}
+                        onClick={() =>{ setShowConfirmDelete({show: true, bookID: item.id})}}
                       className="px-3 py-1 cursor-pointer bg-red-700 text-white rounded hover:opacity-90">
                         Delete
                       </button>
@@ -112,6 +114,12 @@ export default function Home() {
         theme="dark"
         transition={Flip}
       />
+      {showConfirmDelete.show && showConfirmDelete.bookID &&
+      <ConfirmDeleteModal
+        setShowConfirmDelete = {setShowConfirmDelete}
+        bookID= {showConfirmDelete.bookID}
+        /> 
+      }
     </div>
     
   );
