@@ -7,12 +7,17 @@ import { ColorRing } from 'react-loader-spinner';
 import AddFormBook from "./AddFormBook";
 import { Flip, ToastContainer } from "react-toastify";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import { viewBook } from "../Redux/Bookslice";
+import { useNavigate } from 'react-router-dom';
+
 export default function Home() {
 
   const dispatch = useAppDispatch();
   const { data, isloading } = useAppSelector((state) => state.book);
   const [showForm, setshowForm] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState({show:false, bookID:null });
+  const navigate = useNavigate();
+  
 
   const handelSubmitForm = ()=>{
     setshowForm(true);
@@ -20,6 +25,11 @@ export default function Home() {
   useEffect(() => {
     dispatch(getbooks());
   }, [dispatch]);
+
+  const handleView = (book) => {
+      dispatch(viewBook(book.id));
+      navigate('/details');
+    };
 
   return (
     <div className="flex flex-col gap-8 pb-10">
@@ -81,7 +91,7 @@ export default function Home() {
                       : "N/A"}
                   </td>
                   <td className="p-3">
-                    <div className="flex justify-center gap-2 xl:gap-4">
+                    <div  onClick={()=>handleView(item)} className="flex justify-center gap-2 xl:gap-4">
                       <button className="px-3 py-1 cursor-pointer bg-cyan-600 text-white rounded hover:opacity-90">
                         View
                       </button>
