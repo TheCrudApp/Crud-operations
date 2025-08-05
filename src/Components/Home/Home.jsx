@@ -91,8 +91,8 @@ export default function Home() {
                       : "N/A"}
                   </td>
                   <td className="p-3">
-                    <div  onClick={()=>handleView(item)} className="flex justify-center gap-2 xl:gap-4">
-                      <button className="px-3 py-1 cursor-pointer bg-cyan-600 text-white rounded hover:opacity-90">
+                    <div className="flex justify-center gap-2 xl:gap-4">
+                      <button onClick={()=>handleView(item)} className="px-3 py-1 cursor-pointer bg-cyan-600 text-white rounded hover:opacity-90">
                         View
                       </button>
                       <button className="px-3 py-1 cursor-pointer bg-blue-950 text-white rounded hover:opacity-90">
