@@ -9,6 +9,7 @@ import { Flip, ToastContainer } from "react-toastify";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import { viewBook } from "../Redux/Bookslice";
 import { useNavigate } from 'react-router-dom';
+import SearchBook from "./SearchBook";
 
 export default function Home() {
 
@@ -16,6 +17,7 @@ export default function Home() {
   const { data, isloading } = useAppSelector((state) => state.book);
   const [showForm, setshowForm] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState({show:false, bookID:null });
+  const [searchBook, setSearchBook] = useState('');
   const navigate = useNavigate();
   
 
@@ -43,13 +45,15 @@ export default function Home() {
 
       {/* Content */}
       <main className="w-[90%] mx-auto overflow-x-auto">
-
+        <div className="flex items-center justify-between flex-col md:flex-row">
             <button 
             onClick={handelSubmitForm}
             className="bg-blue-950 w-64 mb-3 cursor-pointer text-white hover:bg-orange-600 transition-all duration-300 font-bold px-6 py-2 rounded-xl">
               Add Book
             </button>
             {showForm && <AddFormBook onClose={()=>setshowForm(false)} />}
+          <SearchBook setSearchBook={setSearchBook} />
+        </div>
        
         {/* Loader or Table */}
         {isloading ? (
@@ -78,7 +82,7 @@ export default function Home() {
             </thead>
 
             <tbody>
-              {data && data.map((item) => (
+              {data && data.filter(item => item?.title.toLowerCase().includes(searchBook.toLowerCase())).map((item) => (
                 <tr key={item.id} className="hover:bg-gray-100 font-medium transition-all">
                   <td className="p-3">{item.id}</td>
                   <td className="p-3">{item.title}</td>
