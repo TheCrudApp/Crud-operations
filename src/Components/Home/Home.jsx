@@ -10,6 +10,7 @@ import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import { viewBook } from "../Redux/Bookslice";
 import { useNavigate } from 'react-router-dom';
 import SearchBook from "./SearchBook";
+import EditFormBook from "./EditFormBook";
 
 export default function Home() {
 
@@ -17,6 +18,7 @@ export default function Home() {
   const { data, isloading } = useAppSelector((state) => state.book);
   const [showForm, setshowForm] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState({show:false, bookID:null });
+  const [showUpdateForm, setShowUpdateForm] = useState({show:false, data:null });
   const [searchBook, setSearchBook] = useState('');
   const navigate = useNavigate();
   
@@ -99,7 +101,9 @@ export default function Home() {
                       <button onClick={()=>handleView(item)} className="px-3 py-1 cursor-pointer bg-cyan-600 text-white rounded hover:opacity-90">
                         View
                       </button>
-                      <button className="px-3 py-1 cursor-pointer bg-blue-950 text-white rounded hover:opacity-90">
+                      <button 
+                      onClick={()=>{setShowUpdateForm({show: true, data:{id:item.id,title:item.title,author:item.author,price:item.price,category:item.category}})}}             
+                      className="px-3 py-1 cursor-pointer bg-blue-950 text-white rounded hover:opacity-90">
                         Edit
                       </button>
                       <button 
@@ -133,6 +137,12 @@ export default function Home() {
         setShowConfirmDelete = {setShowConfirmDelete}
         bookID= {showConfirmDelete.bookID}
         /> 
+      }
+      {showUpdateForm.show && showUpdateForm.data &&
+      <EditFormBook
+      setShowUpdateForm = {setShowUpdateForm}
+      data = {showUpdateForm.data}
+      />
       }
     </div>
     
