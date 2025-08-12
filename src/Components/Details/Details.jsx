@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Details = () => {
   const book = useSelector((state) => state.book.selectedBook);
@@ -28,6 +29,8 @@ const Details = () => {
           <p><span className="font-medium">Book ID:</span> {book.id}</p>
           <p><span className="font-medium">Created At:</span> {new Date(book.createdAt).toLocaleDateString()}</p>
         </div>
+         <Link to="/" className='block w-32 bg-red-500 mt-4 flex justify-center items-center rounded-3xl h-8 hover:scale-105 font-bold text-[#ffffff] text-lg'>Back</Link>
+
       </div>
     </div>
   );
